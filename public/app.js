@@ -1,12 +1,25 @@
 function sendInput() {
-    var name = document.getElementById('name').value.trim();
-    var value = document.getElementById('value').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const value = document.getElementById('value').value.trim();
 
     if (name === "" || value === "") {
         alert('名前とテキストの両方を入力してください。');
-        return false;
+        return;
     }
 
-    // ここでフォームデータを送信する処理を追加
-    alert('フォームが正常に送信されました！');
+    fetch('/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: name, value: value })
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert('データが正常に保存されました');
+        })
+        .catch(error => {
+            console.error('データの保存に失敗しました:', error);
+            alert('データの保存に失敗しました');
+        });
 }
